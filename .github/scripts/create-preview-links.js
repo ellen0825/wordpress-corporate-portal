@@ -65,6 +65,26 @@ function getParentThemeName(themeSlug) {
 		: '';
 }
 
+function createPlaygroundPreconfiguredLink(themeName = '', blueprint = '', existingPr = false) {
+	const url = new URL('https://playground.wordpress.net/');
+	const searchParams = new URLSearchParams();
+
+	searchParams.set('storage', 'browser'); // We need to have the storage to be able to create/update the PR
+	searchParams.set('ghexport-repo-url', 'https://github.com/WordPress/community-themes');
+	searchParams.set('ghexport-content-type', 'theme');
+	searchParams.set('ghexport-theme', themeName);
+
+	if ( existingPr ) {
+		searchParams.set('ghexport-pr-action', 'update');
+		searchParams.set('ghexport-pr-number', existingPr); // See: WordPress/wordpress-playground#1465
+	}
+
+	url.search = searchParams.toString();
+	url.hash = encodeURIComponent(blueprint);
+
+	return url.toString();
+}
+
 /*
  * This function creates a comment on a PR with preview links for the changed themes.
  * It is used by `preview-theme` workflow.
@@ -78,16 +98,15 @@ async function createPreviewLinksComment(github, context, changedThemeSlugs) {
 	const previewLinks = changedThemes
 		.map((themeSlug) => {
 			const parentThemeName = getParentThemeName(themeSlug);
+			const themeName = getThemeName( themeSlug );
+			const blueprint = createBlueprint( themeSlug, context.payload.pull_request.head.ref );
+			const playgroundUrl = createPlaygroundPreconfiguredLink( themeSlug, blueprint, context.payload.pull_request.number );
+
 			const note = parentThemeName
 				? ` (child theme of **${parentThemeName}**)`
 				: '';
 
-			return `- [Preview changes for **${getThemeName(
-				themeSlug
-			)}**](https://playground.wordpress.net/#${createBlueprint(
-				themeSlug,
-				context.payload.pull_request.head.ref
-			)})${note}`;
+			return `- [Preview changes for **${ themeName }**](${playgroundUrl})${note}`;
 		})
 		.join('\n');
 
