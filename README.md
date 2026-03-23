@@ -13,7 +13,7 @@ The aim of this repo is to submit the block themes to the WordPress.org themes d
 To get started with development you have a couple of options. You can set up a local environment or you can use the new [WordPress Playground](https://developer.wordpress.org/playground/) and build your theme online without needing to install anything at all on your machine.
 
 
-#### If you prefer to use the Playground:
+#### If you prefer to use the Playound:
 
 > Warning: The Playground has a few limitations and you won't be able to add new fonts to your theme using it.
 
