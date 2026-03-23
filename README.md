@@ -39,7 +39,7 @@ You can boot up the Playground with the selected theme by clicking one of the li
 
 ![CleanShot 2024-05-28 at 10 45 18](https://github.com/WordPress/community-themes/assets/8419292/1a53ce08-6435-4224-8c9b-9fcf551e965d)
 
-#### If you want to work locally:
+#### If you want to work locly:
 
 ##### Option A — wp-env (recommended)
 
